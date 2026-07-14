@@ -15,3 +15,6 @@ workspace infrastructure used by setup, Cursor tasks, and CI; they are not busin
 - `launch-agent.*` starts one bounded interactive terminal agent.
 - `validate-starter.py` checks the lifecycle, settings, skills, and task contract without
   third-party Python packages.
+
+For the workshop's simplest path, use **Terminal → Run Task → 1. Install — Claude Code**.
+The optional installer task retains the Claude/Codex/Both choice for people who need it.

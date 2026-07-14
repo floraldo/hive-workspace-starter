@@ -2,6 +2,9 @@
 
 A beginner-friendly, document-first AI workspace for Claude Code or Codex in Cursor.
 
+**Giving or taking the Claude Code workshop? Start with [START-HERE.md](START-HERE.md).** It is
+the short, numbered Cursor path from a fresh clone to a first Flow agent.
+
 ## Before you start
 
 - Install [Cursor](https://www.cursor.com/downloads).
@@ -30,38 +33,57 @@ A direct clone is fully editable on your computer, but its `origin` still points
 public starter and normally cannot be pushed by participants. Keep it local, or run
 `setup-workspace` and ask it to connect the copy to a repository you own.
 
+## Use Claude Code in Cursor
+
+When Cursor opens this workspace, it recommends Anthropic's **Claude Code** extension. Install
+it and sign in for the easiest visual experience: plans and edits appear in Cursor rather than
+only in a terminal. The workspace sets new graphical Claude conversations to **plan** mode and
+keeps bypass permissions unavailable.
+
+The extension is recommended, not silently installed. The terminal agent team below needs the
+separate CLI install because the extension's private CLI is not added to your terminal `PATH`.
+See [Anthropic's Cursor/VS Code guide](https://code.claude.com/docs/en/ide-integrations) for
+extension installation and troubleshooting.
+
 ## Install the first terminal agent
 
 An uninstalled AI agent cannot run its own setup skill, so installation is the one manual
-bootstrap. The included script asks whether to install Claude Code, Codex, or both, shows
-the official source, downloads to a temporary file, and asks again before executing it.
+bootstrap. The included script shows the official source, downloads to a temporary file, and
+asks again before executing it.
+
+For the Claude workshop, use **Terminal → Run Task → 1. Install — Claude Code**. It
+preselects Claude Code while retaining the confirmation gate. Choose
+**Optional — Install Codex or Both** only when you want the broader tool choice.
 
 Windows PowerShell:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap-agent.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap-agent.ps1 -Tool claude
 ```
 
 macOS, Linux, or WSL:
 
 ```bash
-bash scripts/bootstrap-agent.sh
+bash scripts/bootstrap-agent.sh claude
 ```
 
-In Cursor you can instead choose **Terminal → Run Task → 🧰 Setup — Install Agent CLI**.
-The CLIs install at user level, never inside this repository. Authentication remains in the
-provider's own interactive flow and no token is written here.
-
-After installation, open a new terminal:
+The CLI installs at user level, never inside this repository. Authentication remains in the
+provider's own interactive flow and no token is written here. After installation, close that
+terminal, open a new one, and run:
 
 ```text
-claude    # then run /setup-workspace
-codex     # then run $setup-workspace
+claude --version
 ```
 
-Next run `/setup-agent-team` in Claude Code or `$setup-agent-team` in Codex. It asks for
-one to four agent names, emoji, roles, tools, and permission postures before changing the
-Cursor tasks.
+If the version check fails or something looks wrong, run `claude doctor`.
+
+Then start **2. Start 🌊 Flow (Claude)** from Cursor's task picker. That task opens the normal
+browser sign-in when needed and starts the workspace session. In Flow, invoke the exact command
+`/setup-workspace`.
+
+If you chose Codex instead, run `codex --version`, then `codex`, and invoke
+`$setup-workspace`. Next run `/setup-agent-team` in Claude Code or `$setup-agent-team` in
+Codex to tailor the team after the first agent is working.
 
 ## Folder system
 
@@ -112,15 +134,17 @@ All Claude skills are user-invoked. They do not grant themselves pre-approved to
 
 ## Cursor agent team
 
-The starter includes three safe defaults:
+The starter includes three safe defaults. Run them manually from **Terminal → Run Task**;
+opening a folder never starts an installer or an agent automatically.
 
 - `🌊 Flow` — primary builder and coordinator;
 - `🔭 Scout` — research and orientation;
-- `🛠 Forge` — bounded implementation and refinement.
+- `🛠 Forge` — bounded review and refinement.
 
-Choose **Terminal → Run Task → 🤖 Agents — Start Team** to open the configured tasks in a
-shared split-terminal group. The panes share one working tree and Git index, so the default
-is one writer at a time. Use separate Git worktrees for deliberate concurrent editing.
+Start with **2. Start 🌊 Flow (Claude)**. When you are ready for the demonstration, choose
+**Optional — 🤖 Start 3-Agent Demo** to open all three in a shared split-terminal group. The
+panes share one working tree and Git index, so Flow is the only default writer; Scout and Forge
+are review agents. Use separate Git worktrees for deliberate concurrent editing.
 
 Claude tasks use official `default`, `acceptEdits`, or eligible `auto` permission modes.
 Codex tasks use read-only or the documented workspace-write/on-request Auto preset. No task

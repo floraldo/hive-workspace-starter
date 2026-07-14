@@ -109,6 +109,31 @@ def validate_settings(checks: Checks) -> None:
         checks.require(rule in denies, f"missing Claude deny rule: {rule}")
 
 
+def validate_cursor_settings(checks: Checks) -> None:
+    settings = load_json(checks, ".vscode/settings.json")
+    checks.require(
+        settings.get("task.allowAutomaticTasks") == "off",
+        "Cursor workspace must not auto-run tasks on folder open",
+    )
+    checks.require(
+        settings.get("claudeCode.initialPermissionMode") == "plan",
+        "Claude Code extension must start new visual sessions in plan mode",
+    )
+    checks.require(
+        settings.get("claudeCode.allowDangerouslySkipPermissions") is False,
+        "Claude Code extension must not expose bypass permissions",
+    )
+
+    extensions = load_json(checks, ".vscode/extensions.json")
+    recommendations = extensions.get("recommendations", [])
+    checks.require(isinstance(recommendations, list), "Cursor extension recommendations must be a list")
+    if isinstance(recommendations, list):
+        checks.require(
+            "anthropic.claude-code" in recommendations,
+            "Cursor must recommend the Claude Code extension",
+        )
+
+
 def validate_skills(checks: Checks) -> None:
     for name in SKILLS:
         claude_path = checks.require_path(f".claude/skills/{name}/SKILL.md")
@@ -163,6 +188,28 @@ def validate_tasks(checks: Checks) -> None:
             "${workspaceFolder}\\scripts\\bootstrap-agent.ps1" in windows_args,
             "bootstrap task is missing its Windows script",
         )
+        checks.require(
+            bootstrap_tasks[0].get("options", {}).get("cwd") == "${workspaceFolder}",
+            "optional bootstrap task must start in the workspace root",
+        )
+
+    claude_bootstrap_tasks = [
+        task
+        for task in tasks
+        if isinstance(task, dict)
+        and task.get("args") == ["${workspaceFolder}/scripts/bootstrap-agent.sh", "claude"]
+    ]
+    checks.require(len(claude_bootstrap_tasks) == 1, "tasks.json must include one Claude Code quick-start install task")
+    if claude_bootstrap_tasks:
+        windows_args = claude_bootstrap_tasks[0].get("windows", {}).get("args", [])
+        checks.require(
+            windows_args[-2:] == ["-Tool", "claude"],
+            "Claude quick-start install task must select Claude on Windows",
+        )
+        checks.require(
+            claude_bootstrap_tasks[0].get("options", {}).get("cwd") == "${workspaceFolder}",
+            "Claude quick-start install task must start in the workspace root",
+        )
 
     compounds = [task for task in tasks if isinstance(task, dict) and "dependsOn" in task]
     checks.require(len(compounds) == 1, "tasks.json must contain exactly one compound agent-team task")
@@ -193,6 +240,29 @@ def validate_tasks(checks: Checks) -> None:
         win_values = windows_task_values(windows.get("args", []))
         expected = {"-Tool": tool, "-Name": name, "-Emoji": emoji, "-Role": role, "-Mode": mode}
         checks.require(win_values == expected, f"Windows and Unix launcher values differ: {task.get('label')}")
+        checks.require(
+            task.get("options", {}).get("cwd") == "${workspaceFolder}",
+            f"agent task must start in the workspace root: {task.get('label')}",
+        )
+
+    writable_agents = [
+        task
+        for task in agent_tasks
+        if len(task.get("args", [])) == 6 and task["args"][-1] in {"edit", "auto"}
+    ]
+    checks.require(
+        len(writable_agents) <= 1,
+        "shared-worktree defaults may configure only one edit or auto agent",
+    )
+
+    for task in tasks:
+        if not isinstance(task, dict):
+            continue
+        run_options = task.get("runOptions", {})
+        checks.require(
+            run_options.get("runOn", "default") == "default",
+            f"task must not auto-run on folder open: {task.get('label')}",
+        )
 
     checked_text = (ROOT / ".vscode/tasks.json").read_text(encoding="utf-8")
     checked_text += (ROOT / "scripts/launch-agent.sh").read_text(encoding="utf-8")
@@ -240,6 +310,7 @@ def main() -> int:
     checks = Checks()
     validate_structure(checks)
     validate_settings(checks)
+    validate_cursor_settings(checks)
     validate_skills(checks)
     validate_tasks(checks)
     validate_bootstrap(checks)
@@ -250,7 +321,7 @@ def main() -> int:
         for failure in checks.failures:
             print(f"- {failure}")
         return 1
-    print("Starter validation passed: lifecycle, settings, skills, tasks, bootstrap, and placeholders are coherent.")
+    print("Starter validation passed: lifecycle, settings, skills, Cursor tasks, bootstrap, and placeholders are coherent.")
     return 0
 
 

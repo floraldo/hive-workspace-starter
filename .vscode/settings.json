@@ -1,0 +1,5 @@
+{
+  "task.allowAutomaticTasks": "off",
+  "claudeCode.initialPermissionMode": "plan",
+  "claudeCode.allowDangerouslySkipPermissions": false
+}

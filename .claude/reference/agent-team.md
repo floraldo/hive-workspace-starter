@@ -11,10 +11,36 @@ temporary file, and asks before executing it:
 
 - Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap-agent.ps1`
 - macOS/Linux/WSL: `bash scripts/bootstrap-agent.sh`
-- Cursor: **Terminal → Run Task → 🧰 Setup — Install Agent CLI**
+- Cursor: **Terminal → Run Task → 1. Install — Claude Code**
 
 Install CLIs at user level, never inside the repository. Authentication remains a separate
 interactive provider flow; never request, copy, or store tokens.
+
+## Cursor first-run path
+
+The workspace includes a deliberately small amount of Cursor configuration:
+
+- `.vscode/extensions.json` recommends `anthropic.claude-code`; Cursor may prompt the
+  participant to install it, but the repository never silently installs an extension.
+- `.vscode/settings.json` sets Claude Code's graphical panel to **plan** mode for its first
+  conversation, keeps the bypass-permissions selector disabled, and turns off automatic tasks.
+- `.vscode/tasks.json` provides the explicit terminal path below. It does not run installers or
+  agents when a folder opens, because that could consume usage, prompt for sign-in, or execute
+  in the wrong workspace.
+
+For a Claude Code workshop, use these visible tasks in order:
+
+1. **1. Install — Claude Code** — runs the bundled installer with Claude preselected.
+2. Start a fresh terminal, run `claude --version`, and optionally `claude doctor`.
+3. **2. Start 🌊 Flow (Claude)** — starts the first interactive terminal agent and opens the
+   provider's normal sign-in when needed.
+4. **Optional — 🤖 Start 3-Agent Demo** — starts Flow, Scout, and Forge only when the
+   participant is ready for three concurrent conversations.
+
+The Claude Code extension is the visual Cursor experience. Its bundled private CLI is not added
+to the terminal `PATH`, so the terminal-agent tasks still require the standalone CLI in step 1.
+If the extension is not visible after installation, reload the Cursor window and check the
+Extensions view.
 
 ## Official sources and verification
 
@@ -47,7 +73,7 @@ Suggested roster:
 |---|---|---|
 | `🌊 Flow` | primary builder and coordinator | guided edit |
 | `🔭 Scout` | research, sources, and orientation | review |
-| `🛠 Forge` | implementation and refinement | guided edit |
+| `🛠 Forge` | review bounded work and suggest refinements | review |
 
 Keep names to letters, numbers, spaces, `_`, or `-`; keep roles to one short sentence. Do
 not embed shell commands, paths, secrets, or provider flags in names or roles.
@@ -70,6 +96,7 @@ approval-never for the workshop.
 `.vscode/tasks.json` contains:
 
 - one interactive bootstrap task;
+- one Claude Code quick-start install task;
 - one to four agent tasks;
 - exactly one compound agent-team task.
 
@@ -84,7 +111,9 @@ Customization may change only:
 - compound dependency labels.
 
 Preserve shell commands, script paths, task type, presentation group, instance limit, and
-bootstrap task. Keep Unix and Windows agent values identical. After edits, run
+bootstrap tasks. Keep Unix and Windows agent values identical. Keep all tasks manual (never
+`runOn: folderOpen`) and start them in `${workspaceFolder}`. In a shared working tree, configure
+at most one `edit` or `auto` agent; make the others review agents. After edits, run
 `python scripts/validate-starter.py` when Python is available (otherwise perform the same
 checks directly), then smoke-test one agent before starting the team.
 

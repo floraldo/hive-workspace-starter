@@ -9,12 +9,17 @@ disable-model-invocation: true
 Configure the existing bounded launcher; do not invent a new orchestration system.
 
 1. Read `.claude/reference/agent-team.md` completely.
-2. Inspect `.vscode/tasks.json`, `scripts/bootstrap-agent.ps1|sh`, and
+2. Inspect `.vscode/extensions.json`, `.vscode/settings.json`, `.vscode/tasks.json`,
+   `scripts/bootstrap-agent.ps1|sh`, and
    `scripts/launch-agent.ps1|sh`. Check `claude --version` and `codex --version` read-only;
    a missing command is an expected setup state.
-3. Ask the reference's five team questions in one compact round. Offer `🌊 Flow`,
+3. For a Claude workshop first run, point to the reference's ordered path: extension
+   recommendation, **1. Install — Claude Code**, a fresh-terminal version check, then
+   **2. Start 🌊 Flow (Claude)** for sign-in and the first workspace session. Do not auto-run
+   any part of it.
+4. Ask the reference's five team questions in one compact round. Offer `🌊 Flow`,
    `🔭 Scout`, and `🛠 Forge` as defaults.
-4. Show the roster and permission mapping before changing files.
+5. Show the roster and permission mapping before changing files.
 
 For a missing requested CLI, prefer the matching bundled bootstrap script. State which
 official URL it downloads and ask before running it; the bootstrap asks again before the
@@ -25,8 +30,10 @@ flow. Never handle tokens.
 Edit only the bounded fields permitted by the reference in `.vscode/tasks.json`. Keep one
 to four agent tasks plus the compound task. A task's Unix and Windows arguments must match.
 Use `standard`, `edit`, or `auto`; choose Claude `auto` only after the user confirms their
-account/client supports it. Otherwise use `edit`. Never add bypass, yolo, danger-full-access,
-or approval-never flags.
+account/client supports it. Otherwise use `edit`. In a shared working tree, configure at most
+one `edit` or `auto` agent; other default agents stay `standard`. Never add bypass, yolo,
+danger-full-access, or approval-never flags, and do not change the workspace settings that keep
+automatic tasks off and graphical Claude in plan mode.
 
 Run `python scripts/validate-starter.py` when Python is available; otherwise parse the JSON
 and perform the reference's task checks directly. Then check launcher syntax where the
