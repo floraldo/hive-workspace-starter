@@ -1,0 +1,4 @@
+interface:
+  display_name: "Session Close"
+  short_description: "Leave a clean session handoff"
+  default_prompt: "Close this session with updated status and next actions."

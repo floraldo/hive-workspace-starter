@@ -1,0 +1,4 @@
+interface:
+  display_name: "Setup Workspace"
+  short_description: "Personalize the starter safely"
+  default_prompt: "Set up this workspace from the starter template."

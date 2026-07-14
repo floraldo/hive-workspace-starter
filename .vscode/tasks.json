@@ -1,0 +1,147 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🌊 Flow — Claude",
+      "type": "process",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/scripts/launch-agent.sh",
+        "claude",
+        "Flow",
+        "🌊",
+        "Primary builder and coordinator",
+        "edit"
+      ],
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\scripts\\launch-agent.ps1",
+          "-Tool",
+          "claude",
+          "-Name",
+          "Flow",
+          "-Emoji",
+          "🌊",
+          "-Role",
+          "Primary builder and coordinator",
+          "-Mode",
+          "edit"
+        ]
+      },
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "group": "ai-agent-team",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "runOptions": { "instanceLimit": 1 },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔭 Scout — Claude",
+      "type": "process",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/scripts/launch-agent.sh",
+        "claude",
+        "Scout",
+        "🔭",
+        "Research sources and orient the team",
+        "standard"
+      ],
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\scripts\\launch-agent.ps1",
+          "-Tool",
+          "claude",
+          "-Name",
+          "Scout",
+          "-Emoji",
+          "🔭",
+          "-Role",
+          "Research sources and orient the team",
+          "-Mode",
+          "standard"
+        ]
+      },
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "group": "ai-agent-team",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "runOptions": { "instanceLimit": 1 },
+      "problemMatcher": []
+    },
+    {
+      "label": "🛠 Forge — Claude",
+      "type": "process",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/scripts/launch-agent.sh",
+        "claude",
+        "Forge",
+        "🛠",
+        "Implement and refine bounded work",
+        "edit"
+      ],
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\scripts\\launch-agent.ps1",
+          "-Tool",
+          "claude",
+          "-Name",
+          "Forge",
+          "-Emoji",
+          "🛠",
+          "-Role",
+          "Implement and refine bounded work",
+          "-Mode",
+          "edit"
+        ]
+      },
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "group": "ai-agent-team",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "runOptions": { "instanceLimit": 1 },
+      "problemMatcher": []
+    },
+    {
+      "label": "🤖 Agents — Start Team",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "🌊 Flow — Claude",
+        "🔭 Scout — Claude",
+        "🛠 Forge — Claude"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

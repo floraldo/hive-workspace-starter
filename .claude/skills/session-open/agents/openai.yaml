@@ -1,0 +1,4 @@
+interface:
+  display_name: "Session Open"
+  short_description: "Orient to current workspace work"
+  default_prompt: "Open a focused session and show the best next actions."
