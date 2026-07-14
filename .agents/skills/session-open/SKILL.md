@@ -5,14 +5,6 @@ description: Start a focused work session by reviewing workspace context, root s
 
 # Session Open
 
-1. Read `00-context/workspace.md`, `00-context/boundaries.md`,
-   `03-status/workspace-status.md`, `03-status/tasks.md`, and recent decisions.
-2. List projects. For active projects, read only `00-context/brief.md` and
-   `03-status/status.md`.
-3. List `01-input/inbox/` without reading item contents unless asked.
-4. Inspect Git status read-only; do not stage or commit.
-5. Report purpose, project next actions, blockers or stale statuses, inbox count, and up to
-   three focus options.
-6. Ask which outcome to focus on. Do not edit during session open.
-
-State missing information plainly; never infer progress from output filenames alone.
+Read `.claude/skills/session-open/SKILL.md` completely and follow its Markdown procedure.
+Treat Claude-specific frontmatter as metadata. In Codex, invoke this wrapper as
+`$session-open`.

@@ -1,4 +1,0 @@
-interface:
-  display_name: "New Project"
-  short_description: "Create a standard project"
-  default_prompt: "Create a new project with the standard lifecycle."

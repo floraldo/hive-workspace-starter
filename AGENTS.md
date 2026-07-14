@@ -18,4 +18,5 @@ This is a document-first workspace, not a software project by default.
 - Update the relevant `03-status/status.md` after meaningful project progress.
 
 Use repository skills from `.agents/skills/`. Read `.claude/reference/workspace-system.md`
-for detailed placement rules; the reference is tool-neutral despite its location.
+for detailed placement rules; all `.claude/reference/` files are tool-neutral despite the
+directory name. Codex skill wrappers route to canonical bodies in `.claude/skills/`.

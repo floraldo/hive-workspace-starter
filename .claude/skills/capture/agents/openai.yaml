@@ -1,4 +1,0 @@
-interface:
-  display_name: "Capture"
-  short_description: "Triage incoming work and knowledge"
-  default_prompt: "Capture this item in the right workspace location."

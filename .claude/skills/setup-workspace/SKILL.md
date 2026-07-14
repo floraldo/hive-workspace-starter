@@ -22,7 +22,6 @@ Personalize the supplied system without redesigning it.
 
 After confirmation, edit only the confirmed fields in:
 
-- `README.md`;
 - `00-context/*.md`;
 - `03-status/workspace-status.md`, `tasks.md`, and `decisions.md`;
 - a new `projects/<slug>/` copied from `projects/_template/`.
@@ -36,13 +35,15 @@ separately asks.
 
 Treat GitHub as a separate external-write gate.
 
+Read `.claude/reference/github-setup.md` completely only when the user asks to connect,
+publish, or clarify a direct clone.
+
 1. If the user created the repository with **Use this template**, preserve its origin and
    report that setup is complete.
-2. If this is a direct clone of the starter, do not push changes to the starter origin.
-   Recommend creating a personal repository from the template and moving the work there.
-3. If there is no origin and the user asks to connect one, verify `gh auth status`, ask for
-   owner, repository name, and public/private visibility, show the exact operation, and get
-   confirmation before `gh repo create --source . --push`.
+2. If this is a direct clone of the starter, do not push to its origin. Offer local-only
+   use or the reference's explicit `starter`-remote plus new-`origin` procedure.
+3. For a new remote, support both the GitHub CLI and browser-created empty-repository paths.
+   Ask for owner, name, and visibility; show the exact operation and get confirmation.
 4. Never replace an origin, change visibility, publish content, or force-push silently.
 
 ## Validation
@@ -52,6 +53,8 @@ Treat GitHub as a separate external-write gate.
 - Confirm placeholders remain only under `projects/_template/`.
 - Confirm no secret-like values or copied personal documents were introduced.
 - Confirm only approved files changed with `git status --short`.
+- Run `python scripts/validate-starter.py` when Python is available; otherwise perform the
+  same manifest checks directly and report that the deterministic script was unavailable.
 - Report created, personalized, preserved, and deferred items separately.
 
 Finish by suggesting `session-open`, `new-project`, and `setup-agent-team`.

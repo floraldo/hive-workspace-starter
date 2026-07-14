@@ -2,14 +2,85 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "🌊 Flow — Claude",
+      "label": "1. Install \u2014 Claude Code",
+      "type": "process",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/scripts/bootstrap-agent.sh",
+        "claude"
+      ],
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\scripts\\bootstrap-agent.ps1",
+          "-Tool",
+          "claude"
+        ]
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Optional \u2014 Install Codex or Both",
+      "type": "process",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/scripts/bootstrap-agent.sh"
+      ],
+      "windows": {
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}\\scripts\\bootstrap-agent.ps1"
+        ]
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "2. Start \ud83c\udf0a Flow (Claude)",
       "type": "process",
       "command": "bash",
       "args": [
         "${workspaceFolder}/scripts/launch-agent.sh",
         "claude",
         "Flow",
-        "🌊",
+        "\ud83c\udf0a",
         "Primary builder and coordinator",
         "edit"
       ],
@@ -26,34 +97,40 @@
           "-Name",
           "Flow",
           "-Emoji",
-          "🌊",
+          "\ud83c\udf0a",
           "-Role",
           "Primary builder and coordinator",
           "-Mode",
           "edit"
         ]
       },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "presentation": {
         "echo": false,
         "reveal": "always",
-        "focus": false,
+        "focus": true,
         "panel": "new",
         "group": "ai-agent-team",
         "showReuseMessage": false,
         "clear": true
       },
-      "runOptions": { "instanceLimit": 1 },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
       "problemMatcher": []
     },
     {
-      "label": "🔭 Scout — Claude",
+      "label": "Optional \u2014 \ud83d\udd2d Scout (Claude)",
       "type": "process",
       "command": "bash",
       "args": [
         "${workspaceFolder}/scripts/launch-agent.sh",
         "claude",
         "Scout",
-        "🔭",
+        "\ud83d\udd2d",
         "Research sources and orient the team",
         "standard"
       ],
@@ -70,12 +147,15 @@
           "-Name",
           "Scout",
           "-Emoji",
-          "🔭",
+          "\ud83d\udd2d",
           "-Role",
           "Research sources and orient the team",
           "-Mode",
           "standard"
         ]
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
       },
       "presentation": {
         "echo": false,
@@ -86,20 +166,23 @@
         "showReuseMessage": false,
         "clear": true
       },
-      "runOptions": { "instanceLimit": 1 },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
       "problemMatcher": []
     },
     {
-      "label": "🛠 Forge — Claude",
+      "label": "Optional \u2014 \ud83d\udee0 Forge (Claude)",
       "type": "process",
       "command": "bash",
       "args": [
         "${workspaceFolder}/scripts/launch-agent.sh",
         "claude",
         "Forge",
-        "🛠",
-        "Implement and refine bounded work",
-        "edit"
+        "\ud83d\udee0",
+        "Review bounded work and suggest refinements",
+        "standard"
       ],
       "windows": {
         "command": "powershell.exe",
@@ -114,12 +197,15 @@
           "-Name",
           "Forge",
           "-Emoji",
-          "🛠",
+          "\ud83d\udee0",
           "-Role",
-          "Implement and refine bounded work",
+          "Review bounded work and suggest refinements",
           "-Mode",
-          "edit"
+          "standard"
         ]
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
       },
       "presentation": {
         "echo": false,
@@ -130,16 +216,19 @@
         "showReuseMessage": false,
         "clear": true
       },
-      "runOptions": { "instanceLimit": 1 },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
       "problemMatcher": []
     },
     {
-      "label": "🤖 Agents — Start Team",
+      "label": "Optional \u2014 \ud83e\udd16 Start 3-Agent Demo",
       "dependsOrder": "parallel",
       "dependsOn": [
-        "🌊 Flow — Claude",
-        "🔭 Scout — Claude",
-        "🛠 Forge — Claude"
+        "2. Start \ud83c\udf0a Flow (Claude)",
+        "Optional \u2014 \ud83d\udd2d Scout (Claude)",
+        "Optional \u2014 \ud83d\udee0 Forge (Claude)"
       ],
       "problemMatcher": []
     }

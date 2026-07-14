@@ -1,4 +1,0 @@
-interface:
-  display_name: "Setup Agent Team"
-  short_description: "Configure safe Cursor agent terminals"
-  default_prompt: "Configure Claude Code or Codex agent terminals in Cursor."

@@ -39,4 +39,5 @@ This is a document-first workspace for practical knowledge work.
 
 Read `.claude/reference/workspace-system.md` for folder semantics,
 `.claude/reference/setup-interview.md` before personal-document discovery, and
-`.claude/reference/agent-team.md` before changing agent tasks or installation.
+`.claude/reference/agent-team.md` before changing agent tasks or installation. Read
+`.claude/reference/github-setup.md` only when Git or GitHub ownership is relevant.
