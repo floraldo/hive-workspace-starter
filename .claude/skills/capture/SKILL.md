@@ -1,12 +1,14 @@
 ---
 name: capture
 description: Triage a new note, task, file, link, decision, output, or learning into the matching root or project lifecycle folder while preserving provenance. Use when something new needs a safe, explicit home.
+argument-hint: "<item, note, link, or path>"
 disable-model-invocation: true
 ---
 
 # Capture
 
-1. Classify the item as context, input, output, status, or knowledge.
+1. Classify `$ARGUMENTS` as context, input, output, status, or knowledge. Ask for the item
+   when the argument is empty.
 2. Decide its scale: one project or the workspace root. If neither is clear, use
    `01-input/inbox/` and state the question that will resolve it.
 3. For an outside file, do not read or copy it until the user approves the exact path and

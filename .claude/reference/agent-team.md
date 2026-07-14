@@ -5,30 +5,31 @@ before changing installers, CLI flags, or permission modes.
 
 ## Bootstrap boundary
 
-The first agent CLI must be installed manually because an uninstalled tool cannot run its
-own setup skill. Install CLIs at user level, never inside this repository. After one tool
-is running, `setup-agent-team` may verify it, offer the second tool, and rewrite only the
-bounded task fields.
+The first agent CLI must be installed before an agent can run its setup skill. Prefer the
+bundled bootstrap, which displays the official source, downloads the installer to a
+temporary file, and asks before executing it:
 
-## Official installation
+- Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap-agent.ps1`
+- macOS/Linux/WSL: `bash scripts/bootstrap-agent.sh`
+- Cursor: **Terminal → Run Task → 🧰 Setup — Install Agent CLI**
 
-Claude Code:
+Install CLIs at user level, never inside the repository. Authentication remains a separate
+interactive provider flow; never request, copy, or store tokens.
 
-- Windows PowerShell: `irm https://claude.ai/install.ps1 | iex`
-- macOS/Linux/WSL: `curl -fsSL https://claude.ai/install.sh | bash`
-- Verify: `claude --version` and `claude doctor`
-- Source: <https://code.claude.com/docs/en/installation>
+## Official sources and verification
 
-Codex:
+| Tool | Windows installer | macOS/Linux/WSL installer | Verify |
+|---|---|---|---|
+| Claude Code | `https://claude.ai/install.ps1` | `https://claude.ai/install.sh` | `claude --version`; `claude doctor` |
+| Codex | `https://chatgpt.com/codex/install.ps1` | `https://chatgpt.com/codex/install.sh` | `codex --version`; optionally `codex doctor` |
 
-- Windows PowerShell: `irm https://chatgpt.com/codex/install.ps1 | iex`
-- macOS/Linux: `curl -fsSL https://chatgpt.com/codex/install.sh | sh`
-- Verify: `codex --version`
-- Source: <https://developers.openai.com/codex/cli>
+Sources:
 
-Show the exact command and obtain confirmation before running a downloaded installer.
-Authentication is a separate interactive step: launch `claude` or `codex` and let the user
-complete the provider's sign-in flow. Never request or store tokens in this repository.
+- Claude Code installation: <https://code.claude.com/docs/en/installation>
+- Codex CLI: <https://developers.openai.com/codex/cli>
+
+Do not make a first install non-interactive. If the bootstrap is unavailable, show the
+official platform command and obtain confirmation immediately before running it.
 
 ## Team questions
 
@@ -38,7 +39,7 @@ Ask in one compact round:
 2. How many terminals, from one to four? Three is the useful default.
 3. For each: emoji, short name, role, and tool.
 4. Permission posture: review, guided edit, or official auto where supported?
-5. Should the task file be changed now? Show the proposed roster first.
+5. Should `.vscode/tasks.json` be changed now? Show the proposed roster first.
 
 Suggested roster:
 
@@ -56,35 +57,42 @@ not embed shell commands, paths, secrets, or provider flags in names or roles.
 | Requested posture | Claude Code | Codex |
 |---|---|---|
 | review | `--permission-mode default` | `--sandbox read-only --ask-for-approval on-request` |
-| guided edit | `--permission-mode acceptEdits` | `--sandbox workspace-write --ask-for-approval on-request` |
-| auto | `--permission-mode auto` only when the account/client supports it | same safe workspace-write/on-request preset |
+| guided edit | `--permission-mode acceptEdits` | workspace-write/on-request Auto preset |
+| auto | `--permission-mode auto` only when supported | `--sandbox workspace-write --ask-for-approval on-request` |
 
 Claude Code auto mode is a research preview and is not available to every plan, model, or
 provider. If eligibility is unknown, use guided edit. Never substitute
-`--dangerously-skip-permissions`. Never use Codex `--yolo` or danger-full-access for the
-workshop.
+`--dangerously-skip-permissions`. Never use Codex `--yolo`, danger-full-access, or
+approval-never for the workshop.
 
 ## Cursor task contract
 
-`.vscode/tasks.json` contains one task per agent and one compound task. The individual
-tasks share `presentation.group: "ai-agent-team"`; VS Code-compatible editors display them
-as split terminals. The compound task uses parallel dependencies.
+`.vscode/tasks.json` contains:
+
+- one interactive bootstrap task;
+- one to four agent tasks;
+- exactly one compound agent-team task.
+
+Agent tasks share `presentation.group: "ai-agent-team"`, which creates split terminals in
+VS Code-compatible task runners. The compound task starts dependencies in parallel.
 
 Customization may change only:
 
-- task label;
+- agent task label;
 - `-Tool`/tool argument: `claude` or `codex`;
 - name, emoji, role, and mode arguments;
 - compound dependency labels.
 
-Preserve the shell commands, script paths, task type, presentation group, and instance
-limit. Parse the JSON after edits and run one single-agent task before the whole team.
+Preserve shell commands, script paths, task type, presentation group, instance limit, and
+bootstrap task. Keep Unix and Windows agent values identical. After edits, run
+`python scripts/validate-starter.py` when Python is available (otherwise perform the same
+checks directly), then smoke-test one agent before starting the team.
 
 ## Concurrency boundary
 
-Split terminals share the same repository and Git index. Default to one writer: Flow edits,
+Split terminals share the repository and Git index. Default to one writer: Flow edits,
 Scout researches, Forge reviews or waits. For simultaneous edits, create a separate Git
-worktree and branch per agent; do not pretend terminal panes provide filesystem isolation.
+worktree and branch per agent.
 
 Official references:
 

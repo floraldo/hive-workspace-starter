@@ -2,7 +2,70 @@
 
 A beginner-friendly, document-first AI workspace for Claude Code or Codex in Cursor.
 
-The same five-folder lifecycle appears at the workspace root and inside every project:
+## Before you start
+
+- Install [Cursor](https://www.cursor.com/downloads).
+- Install [Git](https://git-scm.com/downloads) or GitHub Desktop. Git for Windows is
+  recommended for native Windows Claude Code.
+- Have access to an eligible Claude Code or Codex account. A GitHub account is needed only
+  when you want your own remote repository.
+
+## Get your copy
+
+### Recommended: create your own repository
+
+Choose [Use this template](https://github.com/floraldo/hive-workspace-starter/generate),
+then clone the repository GitHub creates for you. Its `origin` will already be yours.
+
+### Clone a local workshop copy
+
+Anyone can clone the public starter without a GitHub seat or write access:
+
+```bash
+git clone https://github.com/floraldo/hive-workspace-starter.git my-ai-workspace
+cd my-ai-workspace
+```
+
+A direct clone is fully editable on your computer, but its `origin` still points to the
+public starter and normally cannot be pushed by participants. Keep it local, or run
+`setup-workspace` and ask it to connect the copy to a repository you own.
+
+## Install the first terminal agent
+
+An uninstalled AI agent cannot run its own setup skill, so installation is the one manual
+bootstrap. The included script asks whether to install Claude Code, Codex, or both, shows
+the official source, downloads to a temporary file, and asks again before executing it.
+
+Windows PowerShell:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\bootstrap-agent.ps1
+```
+
+macOS, Linux, or WSL:
+
+```bash
+bash scripts/bootstrap-agent.sh
+```
+
+In Cursor you can instead choose **Terminal → Run Task → 🧰 Setup — Install Agent CLI**.
+The CLIs install at user level, never inside this repository. Authentication remains in the
+provider's own interactive flow and no token is written here.
+
+After installation, open a new terminal:
+
+```text
+claude    # then run /setup-workspace
+codex     # then run $setup-workspace
+```
+
+Next run `/setup-agent-team` in Claude Code or `$setup-agent-team` in Codex. It asks for
+one to four agent names, emoji, roles, tools, and permission postures before changing the
+Cursor tasks.
+
+## Folder system
+
+The same lifecycle appears at root and inside every project:
 
 ```text
 00-context/   what the work is and what matters
@@ -10,47 +73,92 @@ The same five-folder lifecycle appears at the workspace root and inside every pr
 02-output/    drafts and deliverables
 03-status/    current state, tasks, decisions, and next action
 04-knowledge/ reviewed learning worth remembering
+
+projects/
+  <project>/
+    00-context/
+    01-input/
+    02-output/
+    03-status/
+    04-knowledge/
 ```
 
-`projects/` is an unnumbered container. Each project repeats the five folders. `apps/`,
-`packages/`, and `scripts/` support work that becomes more repeatable over time.
+`projects/` is an unnumbered container. `apps/`, `packages/`, and `scripts/` support work
+that becomes more repeatable over time.
 
-## Start in five minutes
+## What is in `.claude/`
 
-1. On GitHub, choose **Use this template** and create your own repository.
-2. Clone your repository and open its folder in Cursor.
-3. Install one terminal agent if needed:
-   - Claude Code: follow <https://code.claude.com/docs/en/installation>
-   - Codex: follow <https://developers.openai.com/codex/cli>
-4. Start `claude` or `codex` in Cursor's terminal.
-5. Run `/setup-workspace` in Claude Code or `$setup-workspace` in Codex.
-6. Run `/setup-agent-team` or `$setup-agent-team` to personalize the split-terminal team.
+| Area | Purpose |
+|---|---|
+| `.claude/CLAUDE.md` | Small, always-loaded workspace map and behavior contract |
+| `.claude/settings.json` | Schema-backed secret-file read denies and disabled dynamic skill shell execution |
+| `.claude/rules/` | Lifecycle, safety, source-integrity, promotion, and multi-agent rules |
+| `.claude/reference/` | Detailed folder, interview/privacy, GitHub, and agent-team contracts loaded on demand |
+| `.claude/skills/` | Six explicit workflows listed below |
 
-An AI tool cannot install itself before it exists. The first CLI installation is therefore
-the only manual bootstrap; the setup skill can verify it, install an optional second CLI
-with approval, and configure the workspace.
+The equivalent Codex entry points live in `.agents/skills/` and route to the same canonical
+skill bodies, so the two tools cannot silently develop different procedures.
 
-## Included
+| Skill | What it does |
+|---|---|
+| `setup-workspace` | Interviews the owner, personalizes bounded context/status fields, applies the personal-document consent gate, creates a first project, and optionally connects GitHub |
+| `setup-agent-team` | Verifies/installs CLIs and configures one to four Cursor terminal agents |
+| `session-open` | Reads context and status, then offers a focused next outcome without editing |
+| `new-project` | Copies the exact five-folder project template and fills its brief/status |
+| `capture` | Routes a new item to the correct lifecycle folder with provenance |
+| `session-close` | Leaves clean status, decisions, knowledge, and one next action |
 
-- project-local Claude Code skills in `.claude/skills/`;
-- matching Codex skills in `.agents/skills/`;
-- durable rules and references instead of one oversized prompt;
-- three safe Cursor tasks: `🌊 Flow`, `🔭 Scout`, and `🛠 Forge`;
-- a fictional `projects/kinsai-workshop/` example with no client or personal data;
-- empty, documented `apps/` and `packages/` areas plus a `scripts/` experimentation area.
+All Claude skills are user-invoked. They do not grant themselves pre-approved tools.
 
-## Safety defaults
+## Cursor agent team
 
-- Reading personal documents outside this repository requires specific, current consent.
-- Credentials and common key files are denied and gitignored.
-- External writes, publishing, authentication, and destructive actions require approval.
-- Agent launchers never use Claude's bypass-permissions mode or Codex's `--yolo` mode.
-- Parallel agents share one working tree, so only one should edit at a time unless the user
-  deliberately creates separate Git worktrees.
+The starter includes three safe defaults:
+
+- `🌊 Flow` — primary builder and coordinator;
+- `🔭 Scout` — research and orientation;
+- `🛠 Forge` — bounded implementation and refinement.
+
+Choose **Terminal → Run Task → 🤖 Agents — Start Team** to open the configured tasks in a
+shared split-terminal group. The panes share one working tree and Git index, so the default
+is one writer at a time. Use separate Git worktrees for deliberate concurrent editing.
+
+Claude tasks use official `default`, `acceptEdits`, or eligible `auto` permission modes.
+Codex tasks use read-only or the documented workspace-write/on-request Auto preset. No task
+uses bypass-permissions, `--yolo`, danger-full-access, or approval-never flags.
+
+## Apps, packages, scripts, and connectors
+
+- Start with a manual checklist or conversation.
+- Put a one-off repeatable experiment in `scripts/`.
+- Promote logic to `packages/` after reuse by at least two workflows or when it needs
+  tests, schemas, versioning, or a stable contract.
+- Put a stable human-facing entry point in `apps/`.
+- Treat Drive, Gmail, Calendar, Notion, Slack, and CRMs as scoped connectors first.
+
+Empty `apps/` and `packages/` folders are a correct beginner state.
+
+## Safety and validation
+
+- Outside-repository document access needs exact, current, read-only consent first.
+- Common secret paths are gitignored and denied to Claude's built-in file-reading tools.
+  This is not an operating-system security boundary; arbitrary shell access still requires
+  care and approval.
+- External writes, authentication, publishing, and destructive changes require approval.
+- `scripts/validate-starter.py` deterministically checks the lifecycle, settings, skill
+  parity, Cursor task contract, bootstrap URLs, and placeholder scope.
+- GitHub Actions runs the same validator plus Bash and PowerShell syntax checks.
+
+Optional local check when Python is installed:
+
+```bash
+python scripts/validate-starter.py
+```
+
+The fictional `projects/kinsai-workshop/` example contains no client or personal data.
 
 Read [.claude/reference/workspace-system.md](.claude/reference/workspace-system.md) for the
 folder contract and [.claude/reference/agent-team.md](.claude/reference/agent-team.md) for
-the launcher model.
+the launcher contract.
 
 ## License
 

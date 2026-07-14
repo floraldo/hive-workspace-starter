@@ -5,13 +5,6 @@ description: Create one bounded project beneath projects by copying the canonica
 
 # New Project
 
-1. Use the supplied name or ask for it.
-2. Ask for outcome, definition of done, owner, deadline, and approval boundary.
-3. Create a lowercase hyphenated slug from letters, numbers, and hyphens. Reject path
-   separators, `.` and `..`.
-4. If `projects/<slug>/` exists, stop; never merge silently.
-5. Copy `projects/_template/`, then replace its three project placeholders only in the copy.
-6. Fill confirmed brief and status fields; leave unknowns explicit.
-7. Verify all five lifecycle folders and report the first next action.
-
-Do not create apps, packages, connectors, or automation merely because a project exists.
+Read `.claude/skills/new-project/SKILL.md` completely and follow its Markdown procedure.
+Treat Claude-specific frontmatter as metadata. In Codex, invoke this wrapper as
+`$new-project`.
